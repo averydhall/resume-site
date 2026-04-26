@@ -81,7 +81,7 @@ export function NavButton({
       className={`nav-label relative inline-block ${baseColorClass}`}
       style={{
         ["--plain-grey" as string]: PLAIN_GREY,
-        fontSize: "clamp(1rem, 4.5vw, 3.25rem)",
+        fontSize: "clamp(1rem, 4.5vw, 2rem)",
         color: SUBTLE_SILVER,
       }}
       onMouseEnter={onEnter}
