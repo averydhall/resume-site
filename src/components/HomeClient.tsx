@@ -31,20 +31,25 @@ export function HomeClient() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Sync chosen variant to URL (without navigating) and localStorage.
+  // Persist variant to localStorage. Intentionally do not write to the URL.
   useEffect(() => {
     try {
       window.localStorage.setItem(STORAGE_KEY, variant);
     } catch {
       /* ignore */
     }
+  }, [variant]);
+
+  // If the page loaded with ?variant=... in the URL, strip it so the address bar stays clean.
+  useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
-    if (params.get("variant") === variant) return;
-    params.set("variant", variant);
-    const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`;
+    if (!params.has("variant")) return;
+    params.delete("variant");
+    const query = params.toString();
+    const newUrl = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`;
     window.history.replaceState(window.history.state, "", newUrl);
-  }, [variant]);
+  }, []);
 
   const pick = useCallback((v: Variant) => setVariant(v), []);
 
